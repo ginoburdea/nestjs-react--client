@@ -4,6 +4,7 @@ interface InputProps {
     label: string
     error: string | null
     value?: string
+    name?: string
     disabled?: boolean
     type?: 'text' | 'email' | 'password'
     setValue?: (newValue: string) => any
@@ -14,6 +15,7 @@ export default function Input({
     error,
     setValue,
     value,
+    name,
     disabled = false,
     type = 'text',
 }: InputProps) {
@@ -42,6 +44,7 @@ export default function Input({
                         setValue ? setValue(event.target.value) : null
                     }
                     disabled={disabled}
+                    name={name}
                 />
             </label>
             {error && <p className="text-red-700 text-sm mt-1">{error}</p>}
