@@ -4,7 +4,7 @@ interface ButtonProps {
     label: string
     loading?: boolean
     disabled?: boolean
-    onClick: () => any
+    onClick?: () => any
 }
 
 export default function Button({
