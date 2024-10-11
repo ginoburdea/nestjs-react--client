@@ -1,17 +1,12 @@
 'use client'
 import Button from '@/app/components/Button'
 import Input from '@/app/components/Input'
-import submitForm from '@/utils/submitForm'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
 import ms from 'ms'
 import { setCookie } from 'cookies-next'
+import useSubmitForm from '@/utils/useSubmitForm'
 
 export default function RegisterPage() {
-    const [fieldErrors, setFieldErrors] = useState({})
-    const [error, setError] = useState<string | null>(null)
-    const [loading, setLoading] = useState(false)
-
     const router = useRouter()
 
     const handleSuccess = (data: { name: string; email: string }) => {
@@ -27,16 +22,13 @@ export default function RegisterPage() {
         router.push('/admin')
     }
 
-    const register = submitForm(
+    const { error, fieldErrors, handleOnSubmit, loading } = useSubmitForm(
         '/users/register',
-        setLoading,
-        setFieldErrors,
-        setError,
         handleSuccess
     )
 
     return (
-        <form onSubmit={register}>
+        <form onSubmit={handleOnSubmit}>
             <h1 className="text-2xl font-bold mb-4">Inregistrare</h1>
 
             <Input

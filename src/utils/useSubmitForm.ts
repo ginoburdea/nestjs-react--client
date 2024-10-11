@@ -1,17 +1,16 @@
 import getFormData from '@/utils/getFormData'
 import axios, { AxiosError } from 'axios'
-import { Dispatch, SetStateAction, SyntheticEvent, useState } from 'react'
+import { SyntheticEvent, useState } from 'react'
 
-export default function submitForm(
+export default function useSubmitForm(
     url: string,
-    setLoading: Dispatch<SetStateAction<boolean>>,
-    setFieldErrors: Dispatch<SetStateAction<{}>>,
-    setError: Dispatch<SetStateAction<string | null>>,
     handleSuccess: (data: any) => Promise<any> | any
 ) {
-    return async function internalSubmitForm(
-        event: SyntheticEvent<HTMLFormElement>
-    ) {
+    const [fieldErrors, setFieldErrors] = useState({})
+    const [error, setError] = useState<string | null>(null)
+    const [loading, setLoading] = useState(false)
+
+    async function handleOnSubmit(event: SyntheticEvent<HTMLFormElement>) {
         event.preventDefault()
         setLoading(true)
         setFieldErrors({})
@@ -52,5 +51,12 @@ export default function submitForm(
         } finally {
             setLoading(false)
         }
+    }
+
+    return {
+        loading,
+        error,
+        fieldErrors,
+        handleOnSubmit,
     }
 }
