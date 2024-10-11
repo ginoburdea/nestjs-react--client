@@ -3,10 +3,10 @@ import clsx from 'clsx'
 interface InputProps {
     label: string
     error: string | null
-    value: string
+    value?: string
     disabled?: boolean
     type?: 'text' | 'email' | 'password'
-    setValue: (newValue: string) => any
+    setValue?: (newValue: string) => any
 }
 
 export default function Input({
@@ -38,7 +38,9 @@ export default function Input({
                     )}
                     type={type}
                     value={value}
-                    onChange={event => setValue(event.target.value)}
+                    onChange={event =>
+                        setValue ? setValue(event.target.value) : null
+                    }
                     disabled={disabled}
                 />
             </label>
