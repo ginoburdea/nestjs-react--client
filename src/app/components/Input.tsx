@@ -1,5 +1,6 @@
 import clsx from 'clsx'
 import { FormEvent } from 'react'
+import InputError from './InputError'
 
 interface InputProps {
     label: string
@@ -51,7 +52,8 @@ export default function Input({
                     <input {...inputProps} type={type} />
                 )}
             </label>
-            {error && <p className="text-red-700 text-sm mt-1">{error}</p>}
+
+            <InputError message={error}></InputError>
         </div>
     )
 }
