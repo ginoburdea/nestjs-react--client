@@ -1,6 +1,7 @@
 'use client'
 import Button from '@/app/components/Button'
 import Input from '@/app/components/Input'
+import RadioInputs from '@/app/components/RadioInputs'
 import useSubmitForm from '@/utils/useSubmitForm'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 
@@ -58,6 +59,14 @@ export default function AddProjectPage() {
                 type="textarea"
                 name="description"
                 error={fieldErrors.description}></Input>
+            <RadioInputs
+                label="Activ (vizibul la public)?"
+                name="active"
+                options={[
+                    { value: true, label: 'Da' },
+                    { value: false, label: 'Nu' },
+                ]}
+                error={fieldErrors.active}></RadioInputs>
 
             <Button loading={loading} label="Salveaza"></Button>
             {error && <p className="text-red-700 mt-4">Eroare: {error}</p>}
