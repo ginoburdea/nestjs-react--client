@@ -1,3 +1,4 @@
+import { useInputClassNames } from '@/utils/useInputClassNames'
 import clsx from 'clsx'
 import { FormEvent } from 'react'
 import InputError from './InputError'
@@ -33,18 +34,15 @@ export default function Input({
         name: name,
     }
 
+    const { labelClassName } = useInputClassNames(error)
+
     return (
         <div
             className={clsx('mb-4', {
                 'opacity-70': disabled,
             })}>
             <label>
-                <span
-                    className={clsx('block text-sm mb-1 font-bold', {
-                        'text-red-700': !!error,
-                    })}>
-                    {label}
-                </span>
+                <span className={labelClassName}>{label}</span>
 
                 {type === 'textarea' ? (
                     <textarea {...inputProps}></textarea>
