@@ -20,6 +20,7 @@ export default function useSubmitForm(
         try {
             const { data } = await axios.post(url, formData, {
                 baseURL: process.env.NEXT_PUBLIC_SERVER_URL,
+                withCredentials: process.env.NODE_ENV !== 'production',
             })
             await handleSuccess(data)
         } catch (apiError) {
