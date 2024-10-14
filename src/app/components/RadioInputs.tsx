@@ -31,12 +31,13 @@ export default function RadioInputs<T>({
             </label>
 
             {options.map(option => (
-                <label className="block mb-1">
+                <label className="block mb-1" key={option.label}>
                     {/* the lack of the "name" attribute is intentional here as it won't be sent with the http requests */}
                     <input
                         type="radio"
                         onClick={() => setSelectedValue(option.value)}
                         checked={selectedValue === option.value}
+                        onChange={() => {}}
                         className="mr-2"
                     />
                     <span>{option.label}</span>
