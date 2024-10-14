@@ -1,5 +1,6 @@
 import getFormData from '@/utils/getFormData'
 import axios, { AxiosError } from 'axios'
+import { useRouter } from 'next/navigation'
 import { SyntheticEvent, useState } from 'react'
 
 export default function useSubmitForm(
@@ -9,6 +10,7 @@ export default function useSubmitForm(
     const [fieldErrors, setFieldErrors] = useState({})
     const [error, setError] = useState<string | null>(null)
     const [loading, setLoading] = useState(false)
+    const router = useRouter()
 
     async function handleOnSubmit(event: SyntheticEvent<HTMLFormElement>) {
         event.preventDefault()
@@ -49,6 +51,15 @@ export default function useSubmitForm(
                         }))
                     }
                 }
+                return
+            }
+
+            if (apiError.response.status === 401) {
+                const currentPage = location.pathname + location.search
+                router.push(
+                    `/autentificare?next=${currentPage}&error=${apiError.response.data.message}`
+                )
+                return
             }
         } finally {
             setLoading(false)
