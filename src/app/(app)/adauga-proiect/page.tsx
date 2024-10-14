@@ -4,12 +4,18 @@ import Input from '@/app/components/Input'
 import RadioInputs from '@/app/components/RadioInputs'
 import useSubmitForm from '@/utils/useSubmitForm'
 import 'bootstrap-icons/font/bootstrap-icons.css'
+import { useRouter } from 'next/navigation'
 import { SyntheticEvent, useState } from 'react'
 
 export default function AddProjectPage() {
+    const router = useRouter()
+    const onSuccess = () => {
+        router.push('/proiecte')
+    }
+
     const { error, fieldErrors, handleOnSubmit, loading } = useSubmitForm(
         '/projects',
-        () => {}
+        onSuccess
     )
 
     const [photos, setPhotos] = useState<string[]>([])
