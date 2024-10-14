@@ -15,11 +15,13 @@ export default function useSubmitForm(
         setLoading(true)
         setFieldErrors({})
         setError(null)
-        const formData = getFormData(event)
+        const { data: formData, headers } = getFormData(event)
 
         try {
             const { data } = await axios.post(url, formData, {
                 baseURL: process.env.NEXT_PUBLIC_SERVER_URL,
+                formSerializer: { indexes: null },
+                headers,
             })
             await handleSuccess(data)
         } catch (apiError) {
