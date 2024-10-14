@@ -3,15 +3,22 @@ import { useState } from 'react'
 import InputError from './InputError'
 import { useInputClassNames } from '@/utils/useInputClassNames'
 
-interface Props {
+interface Props<T> {
     label: string
     name?: string
     error: string | null
-    options: { value: any; label: string }[]
+    options: { value: T; label: string }[]
+    defaultValue?: T
 }
 
-export default function RadioInputs({ label, name, error, options }: Props) {
-    const [selectedValue, setSelectedValue] = useState(undefined)
+export default function RadioInputs<T>({
+    label,
+    name,
+    error,
+    options,
+    defaultValue,
+}: Props<T>) {
+    const [selectedValue, setSelectedValue] = useState(defaultValue)
 
     const { labelClassName } = useInputClassNames(error)
 

@@ -66,6 +66,7 @@ export default function AddProjectPage() {
                     { value: true, label: 'Da' },
                     { value: false, label: 'Nu' },
                 ]}
+                defaultValue={true}
                 error={fieldErrors.active}></RadioInputs>
 
             <Button loading={loading} label="Salveaza"></Button>
