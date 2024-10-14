@@ -22,19 +22,16 @@ export default function Input({
     disabled = false,
     type = 'text',
 }: InputProps) {
+    const { labelClassName, inputClassName } = useInputClassNames(error)
+
     const inputProps = {
-        className: clsx(
-            'block w-full outline-none border-[1px] border-blue-300 focus:border-blue-400 px-4 py-1 rounded-sm',
-            { 'border-red-500 focus:border-red-700': !!error }
-        ),
+        className: inputClassName,
         value: value,
         onChange: (event: FormEvent<HTMLInputElement | HTMLTextAreaElement>) =>
             setValue ? setValue(event.currentTarget.value) : null,
         disabled: disabled,
         name: name,
     }
-
-    const { labelClassName } = useInputClassNames(error)
 
     return (
         <div
