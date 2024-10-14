@@ -24,6 +24,7 @@ export default function useSubmitForm(
                 baseURL: process.env.NEXT_PUBLIC_SERVER_URL,
                 formSerializer: { indexes: null },
                 headers,
+                withCredentials: process.env.NODE_ENV !== 'production',
             })
             await handleSuccess(data)
         } catch (apiError) {
