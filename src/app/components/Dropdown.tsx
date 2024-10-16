@@ -1,5 +1,4 @@
 'use client'
-import { useEffect, useState } from 'react'
 import InputError from './InputError'
 import { useInputClassNames } from '@/utils/useInputClassNames'
 
@@ -8,7 +7,8 @@ interface Props {
     name?: string
     error: string | null
     options: { value: string; label: string }[]
-    defaultValue?: string
+    value?: string
+    onChange?: (newValue: string) => any
 }
 
 export default function Dropdown({
@@ -16,15 +16,10 @@ export default function Dropdown({
     name,
     error,
     options,
-    defaultValue,
+    value,
+    onChange,
 }: Props) {
-    const [selectedValue, setSelectedValue] = useState(defaultValue)
-
     const { labelClassName, inputClassName } = useInputClassNames(error)
-
-    useEffect(() => {
-        setSelectedValue(defaultValue)
-    }, [])
 
     return (
         <div className="mb-4">
@@ -33,8 +28,10 @@ export default function Dropdown({
                 <select
                     name={name}
                     className={inputClassName}
-                    value={selectedValue}
-                    onChange={ev => setSelectedValue(ev.target.value)}>
+                    value={value}
+                    onChange={ev => {
+                        if (onChange) onChange(ev.target.value)
+                    }}>
                     {options.map(option => (
                         <option
                             className="block mb-1"
