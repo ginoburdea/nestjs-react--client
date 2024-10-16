@@ -1,7 +1,8 @@
 import getFormData from '@/utils/getFormData'
-import axios, { AxiosError } from 'axios'
+import { AxiosError } from 'axios'
 import { useRouter } from 'next/navigation'
 import { SyntheticEvent, useState } from 'react'
+import { getAxios } from './getAxios'
 
 export default function useSubmitForm(
     url: string,
@@ -18,14 +19,10 @@ export default function useSubmitForm(
         setFieldErrors({})
         setError(null)
         const { data: formData, headers } = getFormData(event)
+        const axios = getAxios()
 
         try {
-            const { data } = await axios.post(url, formData, {
-                baseURL: process.env.NEXT_PUBLIC_SERVER_URL,
-                formSerializer: { indexes: null },
-                headers,
-                withCredentials: process.env.NODE_ENV !== 'production',
-            })
+            const { data } = await axios.post(url, formData, { headers })
             await handleSuccess(data)
         } catch (apiError) {
             if (
