@@ -7,19 +7,31 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 import { useRouter } from 'next/navigation'
 import { SyntheticEvent, useState } from 'react'
 
-export default function AddProjectPage() {
+interface Props {
+    title: string
+    formSubmitMethod: 'post' | 'patch' | 'put'
+    formSubmitUrl: string
+}
+
+export default function AddEditProjectTemplate({
+    title,
+    formSubmitMethod,
+    formSubmitUrl,
+}: Props) {
     const router = useRouter()
     const onSuccess = () => {
-        router.push('/proiecte')
+        router.push('/admin/proiecte')
     }
 
     const { error, fieldErrors, handleOnSubmit, loading } = useSubmitForm(
-        '/projects',
+        formSubmitUrl,
         onSuccess,
-        () => ({ photos })
+        () => ({ photos }),
+        formSubmitMethod
     )
 
     const [photoUrls, setPhotoUrls] = useState<string[]>([])
+
     const [photos, setPhotos] = useState<File[]>([])
 
     const handleFiles = (event: SyntheticEvent<HTMLInputElement>) => {
@@ -48,7 +60,7 @@ export default function AddProjectPage() {
 
     return (
         <form onSubmit={handleOnSubmit}>
-            <h1 className="text-2xl font-bold mb-6">Adauga proiect</h1>
+            <h1 className="text-2xl font-bold mb-6">{title}</h1>
 
             <p className="text-sm mb-1 font-bold">Imagini</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 mb-4">
