@@ -7,3 +7,7 @@ body {
     background: var(--background);
     font-family: Arial, Helvetica, sans-serif;
 }
+
+.v-link {
+    @apply text-blue-400 hover:underline cursor-pointer;
+}
