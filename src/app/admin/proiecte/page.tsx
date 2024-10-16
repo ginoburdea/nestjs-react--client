@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import Dropdown from '@/app/components/Dropdown'
+import IconButton from '@/app/components/IconButton'
 
 export default function ProjectsPage() {
     const projects = [
@@ -58,9 +59,9 @@ export default function ProjectsPage() {
         <>
             <div className="flex justify-between items-center mb-2">
                 <h1 className="text-2xl font-bold">Proiecte</h1>
-                <a className="p-1 hover:bg-gray-100 cursor-pointer">
-                    <i className="bi-plus text-2xl"></i>
-                </a>
+                <Link href="/admin/adauga-proiect">
+                    <IconButton size="lg" icon="bi-plus"></IconButton>
+                </Link>
             </div>
 
             <div className="mb-6">
