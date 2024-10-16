@@ -40,6 +40,13 @@ export default function ProjectsPage() {
             setLastPage(res.data.meta.lastPage)
         } catch (error) {
             if (error instanceof AxiosError) {
+                if (error.response?.status === 401) {
+                    router.push(
+                        `/autentificare?error=${error.response?.data.message}&next=${pathname}`
+                    )
+                    return
+                }
+
                 setError(error.response?.data.message)
                 return
             }
