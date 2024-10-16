@@ -11,12 +11,20 @@ interface Props {
     title: string
     formSubmitMethod: 'post' | 'patch' | 'put'
     formSubmitUrl: string
+    defaultValues?: {
+        name: string
+        url: string
+        description: string
+        active: boolean
+        photoUrls: string[]
+    }
 }
 
 export default function AddEditProjectTemplate({
     title,
     formSubmitMethod,
     formSubmitUrl,
+    defaultValues,
 }: Props) {
     const router = useRouter()
     const onSuccess = () => {
@@ -30,7 +38,9 @@ export default function AddEditProjectTemplate({
         formSubmitMethod
     )
 
-    const [photoUrls, setPhotoUrls] = useState<string[]>([])
+    const [photoUrls, setPhotoUrls] = useState<string[]>(
+        defaultValues?.photoUrls || []
+    )
 
     const [photos, setPhotos] = useState<File[]>([])
 
@@ -88,12 +98,18 @@ export default function AddEditProjectTemplate({
             <Input
                 label="Denumire"
                 name="name"
+                initialValue={defaultValues?.name}
                 error={fieldErrors.name}></Input>
-            <Input label="Link" name="url" error={fieldErrors.url}></Input>
+            <Input
+                label="Link"
+                name="url"
+                initialValue={defaultValues?.url}
+                error={fieldErrors.url}></Input>
             <Input
                 label="Descriere"
                 type="textarea"
                 name="description"
+                initialValue={defaultValues?.description}
                 error={fieldErrors.description}></Input>
             <RadioInputs
                 label="Activ (vizibul la public)?"
@@ -102,7 +118,11 @@ export default function AddEditProjectTemplate({
                     { value: true, label: 'Da' },
                     { value: false, label: 'Nu' },
                 ]}
-                defaultValue={true}
+                defaultValue={
+                    typeof defaultValues?.active === 'boolean'
+                        ? defaultValues.active
+                        : true
+                }
                 error={fieldErrors.active}></RadioInputs>
 
             <Button loading={loading} label="Salveaza"></Button>
