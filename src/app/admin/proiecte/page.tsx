@@ -1,59 +1,71 @@
-import clsx from 'clsx'
-import 'bootstrap-icons/font/bootstrap-icons.css'
+'use client'
 import Dropdown from '@/app/components/Dropdown'
+import { useEffect, useState } from 'react'
+import { getAxios } from '@/utils/getAxios'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { AxiosError } from 'axios'
+import Link from 'next/link'
+import Pagination from './Pagination'
+import Projects from './Projects'
+import NoProjectsMessage from './NoProjectsMessage'
 import IconButton from '@/app/components/IconButton'
 
 export default function ProjectsPage() {
-    const projects = [
-        {
-            id: 1,
-            name: 'Lorem ipsum',
-            photo: 'https://placehold.co/250.png',
-            active: true,
-        },
-        {
-            id: 2,
-            name: 'Lorem ipsum',
-            photo: 'https://placehold.co/250.png',
-            active: true,
-        },
-        {
-            id: 3,
-            name: 'Lorem ipsum',
-            photo: 'https://placehold.co/250.png',
-            active: false,
-        },
-        {
-            id: 4,
-            name: 'Lorem ipsum',
-            photo: 'https://placehold.co/250.png',
-            active: false,
-        },
-        {
-            id: 5,
-            name: 'Lorem ipsum',
-            photo: 'https://placehold.co/250.png',
-            active: true,
-        },
-        {
-            id: 6,
-            name: 'Lorem ipsum',
-            photo: 'https://placehold.co/250.png',
-            active: true,
-        },
-        {
-            id: 7,
-            name: 'Lorem ipsum',
-            photo: 'https://placehold.co/250.png',
-            active: false,
-        },
-        {
-            id: 8,
-            name: 'Lorem ipsum',
-            photo: 'https://placehold.co/250.png',
-            active: true,
-        },
-    ]
+    const [projects, setProjects] = useState([])
+    const axios = getAxios()
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState<null | string>(null)
+    const query = useSearchParams()
+    const router = useRouter()
+    const pathname = usePathname()
+
+    const [nextPage, setNextPage] = useState<null | number>(null)
+    const [prevPage, setPrevPage] = useState<null | number>(null)
+
+    const [firstPage, setFirstPage] = useState<null | number>(null)
+    const [lastPage, setLastPage] = useState<null | number>(null)
+
+    const getProjects = async (page: number, order: string) => {
+        setLoading(true)
+
+        try {
+            const res = await axios.get('/projects/all', {
+                params: { page, order },
+            })
+
+            setProjects(res.data.results)
+            setNextPage(res.data.meta.nextPage)
+            setPrevPage(res.data.meta.prevPage)
+            setFirstPage(res.data.meta.firstPage)
+            setLastPage(res.data.meta.lastPage)
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                setError(error.response?.data.message)
+                return
+            }
+            setError(
+                'A aparut o eroare la incarcarea proiectelor. Va rugam sa incercati din nou mai tarziu'
+            )
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        const page = parseInt(query.get('page') || '')
+        if (isNaN(page) || page < 1) {
+            router.replace(pathname + '?page=1')
+            return
+        }
+
+        const order = query.get('order') || ''
+        if (!['newest', 'oldest'].includes(order)) {
+            router.replace(pathname + `?page=${page}&order=newest`)
+            return
+        }
+
+        getProjects(page, order)
+    }, [query, pathname])
 
     return (
         <>
@@ -76,28 +88,22 @@ export default function ProjectsPage() {
                     error={null}></Dropdown>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-3 gap-y-6">
-                {projects.map(project => (
-                    <a
-                        key={project.id}
-                        className="bg-blue-50 hover:drop-shadow cursor-pointer transition-all">
-                        <img
-                            src={project.photo}
-                            className="w-full aspect-square"
-                        />
-                        <div className="p-2">
-                            <p className="pb-3 font-bold">{project.name}</p>
-                            <span
-                                className={clsx('px-3 block w-fit text-sm', {
-                                    'bg-green-100': project.active,
-                                    'bg-red-100': !project.active,
-                                })}>
-                                {project.active ? 'Activ' : 'Inactiv'}
-                            </span>
-                        </div>
-                    </a>
-                ))}
-            </div>
+            {loading && <p>Incarcare...</p>}
+            {!loading && error && <p className="text-red-700">{error}</p>}
+            {!loading && !error && projects.length === 0 && (
+                <NoProjectsMessage />
+            )}
+            {!loading && !error && projects.length > 0 && (
+                <Projects projects={projects} />
+            )}
+            {!loading && !error && (
+                <Pagination
+                    nextPage={nextPage}
+                    prevPage={prevPage}
+                    firstPage={firstPage}
+                    lastPage={lastPage}
+                />
+            )}
         </>
     )
 }
