@@ -67,6 +67,11 @@ export default function ProjectsPage() {
         getProjects(page, order)
     }, [query, pathname])
 
+    const updateOrder = (order: string) => {
+        const page = query.get('page') || ''
+        router.push(pathname + `?page=${page}&order=${order}`)
+    }
+
     return (
         <>
             <div className="flex justify-between items-center mb-2">
@@ -83,7 +88,8 @@ export default function ProjectsPage() {
                         { value: 'newest', label: 'Cele mai noi' },
                         { value: 'oldest', label: 'Cele mai vechi' },
                     ]}
-                    defaultValue={'oldest'}
+                    value={query.get('order') || ''}
+                    onChange={updateOrder}
                     name="orderBy"
                     error={null}></Dropdown>
             </div>
