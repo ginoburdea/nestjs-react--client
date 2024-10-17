@@ -1,5 +1,5 @@
 'use client'
-import Dropdown from '@/app/components/Dropdown'
+import Dropdown from '@/components/Dropdown'
 import { useEffect, useState } from 'react'
 import { getAxios } from '@/utils/getAxios'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
@@ -7,10 +7,14 @@ import Link from 'next/link'
 import Pagination from './Pagination'
 import Projects from './Projects'
 import NoProjectsMessage from './NoProjectsMessage'
-import IconButton from '@/app/components/IconButton'
+import IconButton from '@/components/IconButton'
 import { handleAxiosError } from '@/utils/handleAxiosError'
 
-export default function ProjectsPage() {
+interface Props {
+    adminVersion: boolean
+}
+
+export default function ProjectsPageTemplate({ adminVersion }: Props) {
     const [projects, setProjects] = useState([])
     const axios = getAxios()
     const [loading, setLoading] = useState(true)
@@ -29,9 +33,10 @@ export default function ProjectsPage() {
         setLoading(true)
 
         try {
-            const res = await axios.get('/projects/all', {
-                params: { page, order },
-            })
+            const res = await axios.get(
+                adminVersion ? '/projects/all' : '/public/projects/all',
+                { params: { page, order } }
+            )
 
             setProjects(res.data.results)
             setNextPage(res.data.meta.nextPage)
@@ -70,9 +75,11 @@ export default function ProjectsPage() {
         <>
             <div className="flex justify-between items-center mb-2">
                 <h1 className="text-2xl font-bold">Proiecte</h1>
-                <Link href="/admin/adauga-proiect">
-                    <IconButton size="lg" icon="bi-plus"></IconButton>
-                </Link>
+                {adminVersion && (
+                    <Link href="/admin/adauga-proiect">
+                        <IconButton size="lg" icon="bi-plus"></IconButton>
+                    </Link>
+                )}
             </div>
 
             <div className="mb-6">
@@ -91,18 +98,18 @@ export default function ProjectsPage() {
             {loading && <p>Incarcare...</p>}
             {!loading && error && <p className="text-red-700">{error}</p>}
             {!loading && !error && projects.length === 0 && (
-                <NoProjectsMessage />
+                <NoProjectsMessage showAddProjectButton={adminVersion} />
             )}
             {!loading && !error && projects.length > 0 && (
-                <Projects projects={projects} />
-            )}
-            {!loading && !error && (
-                <Pagination
-                    nextPage={nextPage}
-                    prevPage={prevPage}
-                    firstPage={firstPage}
-                    lastPage={lastPage}
-                />
+                <>
+                    <Projects adminVersion={adminVersion} projects={projects} />
+                    <Pagination
+                        nextPage={nextPage}
+                        prevPage={prevPage}
+                        firstPage={firstPage}
+                        lastPage={lastPage}
+                    />
+                </>
             )}
         </>
     )

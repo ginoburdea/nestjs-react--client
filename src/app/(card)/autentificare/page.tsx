@@ -1,6 +1,6 @@
 'use client'
-import Button from '@/app/components/Button'
-import Input from '@/app/components/Input'
+import Button from '@/components/Button'
+import Input from '@/components/Input'
 import { useRouter } from 'next/navigation'
 import ms from 'ms'
 import { setCookie } from 'cookies-next'
@@ -23,19 +23,14 @@ export default function RegisterPage() {
     }
 
     const { error, fieldErrors, handleOnSubmit, loading } = useSubmitForm(
-        '/users/register',
+        '/users/login',
         handleSuccess
     )
 
     return (
         <form onSubmit={handleOnSubmit}>
-            <h1 className="text-2xl font-bold mb-4">Inregistrare</h1>
+            <h1 className="text-2xl font-bold mb-4">Autentificare</h1>
 
-            <Input
-                label="Nume"
-                type="text"
-                name="name"
-                error={fieldErrors.name}></Input>
             <Input
                 label="Email"
                 type="email"
@@ -46,13 +41,8 @@ export default function RegisterPage() {
                 type="password"
                 name="password"
                 error={fieldErrors.password}></Input>
-            <Input
-                label="Parola master"
-                type="password"
-                name="masterPassword"
-                error={fieldErrors.masterPassword}></Input>
 
-            <Button loading={loading} label="Inregistrare"></Button>
+            <Button loading={loading} label="Autentificare"></Button>
             {error && <p className="text-red-700 mt-4">Eroare: {error}</p>}
         </form>
     )
