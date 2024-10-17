@@ -11,10 +11,10 @@ import IconButton from '@/components/IconButton'
 import { handleAxiosError } from '@/utils/handleAxiosError'
 
 interface Props {
-    getProjectsEndpoint: string
+    adminVersion: boolean
 }
 
-export default function ProjectsPageTemplate({ getProjectsEndpoint }: Props) {
+export default function ProjectsPageTemplate({ adminVersion }: Props) {
     const [projects, setProjects] = useState([])
     const axios = getAxios()
     const [loading, setLoading] = useState(true)
@@ -33,9 +33,10 @@ export default function ProjectsPageTemplate({ getProjectsEndpoint }: Props) {
         setLoading(true)
 
         try {
-            const res = await axios.get(getProjectsEndpoint, {
-                params: { page, order },
-            })
+            const res = await axios.get(
+                adminVersion ? '/projects/all' : '/public/projects/all',
+                { params: { page, order } }
+            )
 
             setProjects(res.data.results)
             setNextPage(res.data.meta.nextPage)
@@ -74,9 +75,11 @@ export default function ProjectsPageTemplate({ getProjectsEndpoint }: Props) {
         <>
             <div className="flex justify-between items-center mb-2">
                 <h1 className="text-2xl font-bold">Proiecte</h1>
-                <Link href="/admin/adauga-proiect">
-                    <IconButton size="lg" icon="bi-plus"></IconButton>
-                </Link>
+                {adminVersion && (
+                    <Link href="/admin/adauga-proiect">
+                        <IconButton size="lg" icon="bi-plus"></IconButton>
+                    </Link>
+                )}
             </div>
 
             <div className="mb-6">
@@ -95,10 +98,10 @@ export default function ProjectsPageTemplate({ getProjectsEndpoint }: Props) {
             {loading && <p>Incarcare...</p>}
             {!loading && error && <p className="text-red-700">{error}</p>}
             {!loading && !error && projects.length === 0 && (
-                <NoProjectsMessage />
+                <NoProjectsMessage showAddProjectButton={adminVersion} />
             )}
             {!loading && !error && projects.length > 0 && (
-                <Projects projects={projects} />
+                <Projects adminVersion={adminVersion} projects={projects} />
             )}
             {!loading && !error && (
                 <Pagination
