@@ -3,12 +3,12 @@ import Dropdown from '@/app/components/Dropdown'
 import { useEffect, useState } from 'react'
 import { getAxios } from '@/utils/getAxios'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { AxiosError } from 'axios'
 import Link from 'next/link'
 import Pagination from './Pagination'
 import Projects from './Projects'
 import NoProjectsMessage from './NoProjectsMessage'
 import IconButton from '@/app/components/IconButton'
+import { handleAxiosError } from '@/utils/handleAxiosError'
 
 export default function ProjectsPage() {
     const [projects, setProjects] = useState([])
@@ -39,20 +39,7 @@ export default function ProjectsPage() {
             setFirstPage(res.data.meta.firstPage)
             setLastPage(res.data.meta.lastPage)
         } catch (error) {
-            if (error instanceof AxiosError) {
-                if (error.response?.status === 401) {
-                    router.push(
-                        `/autentificare?error=${error.response?.data.message}&next=${pathname}`
-                    )
-                    return
-                }
-
-                setError(error.response?.data.message)
-                return
-            }
-            setError(
-                'A aparut o eroare la incarcarea proiectelor. Va rugam sa incercati din nou mai tarziu'
-            )
+            handleAxiosError(error, router, setError)
         } finally {
             setLoading(false)
         }

@@ -11,6 +11,10 @@ interface InputProps {
     disabled?: boolean
     type?: 'text' | 'email' | 'password' | 'textarea'
     setValue?: (newValue: string) => any
+    /**
+     * this prop only works if there is no "value" and "setValue" props
+     */
+    initialValue?: string
 }
 
 export default function Input({
@@ -21,6 +25,7 @@ export default function Input({
     name,
     disabled = false,
     type = 'text',
+    initialValue,
 }: InputProps) {
     const { labelClassName, inputClassName } = useInputClassNames(error)
 
@@ -29,6 +34,7 @@ export default function Input({
         value: value,
         onChange: (event: FormEvent<HTMLInputElement | HTMLTextAreaElement>) =>
             setValue ? setValue(event.currentTarget.value) : null,
+        defaultValue: initialValue,
         disabled: disabled,
         name: name,
     }

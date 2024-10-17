@@ -1,6 +1,13 @@
 import { SyntheticEvent } from 'react'
 
-export default function getFormData(event: SyntheticEvent<HTMLFormElement>) {
+/**
+ * @param event
+ * @param extraData this will overwrite the data from the event if there is a common field
+ */
+export default function getFormData(
+    event: SyntheticEvent<HTMLFormElement>,
+    extraData: Record<string, any> = {}
+) {
     const formData = new FormData(event.target as HTMLFormElement)
     const formDataObject: {
         [key: string]: FormDataEntryValue | FormDataEntryValue[]
@@ -22,6 +29,21 @@ export default function getFormData(event: SyntheticEvent<HTMLFormElement>) {
             formDataObject[key] = [formDataObject[key]]
         }
         ;(formDataObject[key] as FormDataEntryValue[]).push(value)
+    })
+
+    Object.entries(extraData).forEach(([key, value]) => {
+        formDataObject[key] = value
+
+        if (Array.isArray(value)) {
+            for (const item of value) {
+                if (item instanceof File) {
+                    hasFiles = true
+                    return
+                }
+            }
+        }
+
+        if (value instanceof File) hasFiles = true
     })
 
     const headers = {
