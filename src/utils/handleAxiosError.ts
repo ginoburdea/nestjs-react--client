@@ -9,7 +9,7 @@ export const handleAxiosError = (
     if (error instanceof AxiosError) {
         if (error.response?.status === 401) {
             router.push(
-                `/autentificare?error=${error.response?.data.message}&next=${pathname}`
+                `/autentificare?error=${error.response?.data.message}&next=${location.pathname}`
             )
             return
         }
