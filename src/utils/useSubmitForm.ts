@@ -59,7 +59,7 @@ export default function useSubmitForm(
             if (apiError.response.status === 401) {
                 const currentPage = location.pathname + location.search
                 router.push(
-                    `/autentificare?next=${currentPage}&error=${apiError.response.data.message}`
+                    `/admin/autentificare?next=${currentPage}&error=${apiError.response.data.message}`
                 )
                 return
             }
