@@ -101,15 +101,15 @@ export default function ProjectsPageTemplate({ adminVersion }: Props) {
                 <NoProjectsMessage showAddProjectButton={adminVersion} />
             )}
             {!loading && !error && projects.length > 0 && (
-                <Projects adminVersion={adminVersion} projects={projects} />
-            )}
-            {!loading && !error && (
-                <Pagination
-                    nextPage={nextPage}
-                    prevPage={prevPage}
-                    firstPage={firstPage}
-                    lastPage={lastPage}
-                />
+                <>
+                    <Projects adminVersion={adminVersion} projects={projects} />
+                    <Pagination
+                        nextPage={nextPage}
+                        prevPage={prevPage}
+                        firstPage={firstPage}
+                        lastPage={lastPage}
+                    />
+                </>
             )}
         </>
     )
