@@ -1,6 +1,6 @@
 'use client'
-import Button from '@/app/components/Button'
-import Input from '@/app/components/Input'
+import Button from '@/components/Button'
+import Input from '@/components/Input'
 import { useRouter } from 'next/navigation'
 import ms from 'ms'
 import { setCookie } from 'cookies-next'

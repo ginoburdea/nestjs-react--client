@@ -1,4 +1,4 @@
-import IconButton from '@/app/components/IconButton'
+import IconButton from '@/components/IconButton'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 interface Props {

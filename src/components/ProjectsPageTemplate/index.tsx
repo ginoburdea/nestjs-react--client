@@ -1,5 +1,5 @@
 'use client'
-import Dropdown from '@/app/components/Dropdown'
+import Dropdown from '@/components/Dropdown'
 import { useEffect, useState } from 'react'
 import { getAxios } from '@/utils/getAxios'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
@@ -7,7 +7,7 @@ import Link from 'next/link'
 import Pagination from './Pagination'
 import Projects from './Projects'
 import NoProjectsMessage from './NoProjectsMessage'
-import IconButton from '@/app/components/IconButton'
+import IconButton from '@/components/IconButton'
 import { handleAxiosError } from '@/utils/handleAxiosError'
 
 interface Props {
