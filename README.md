@@ -47,3 +47,24 @@ npm start
 # Lint fisisere (aplicarea regulilor eslint pentru o calitate imbunatatia a codului)
 npm run lint
 ```
+
+### 5. Link-uri
+
+Linkurile acestui proiect sunt impartite in doua categorii:
+
+-   linkuri publice:
+    -   sunt folosite de clientii cu care artistul imparateste site-ul
+    -   nu necesita autentificare
+-   linkuri private:
+    -   incep cu /admin
+    -   sunt folosite doar de artistul care foloseste platforma
+    -   in afara de `/admin/autentificare` si `/admin/inregistrare`, necesita sa fi autentificat pentru a le accesa
+
+| Link                        | Tip    | Descriere                               |
+| --------------------------- | ------ | --------------------------------------- |
+| /                           | Public | Vizualizare proiecte active             |
+| /admin                      | Privat | Vizualizare proiecte active si inactive |
+| /admin/proiect/(id-proiect) | Privat | Editare proiect cu id-ul dat            |
+| /admin/adauga-proiect       | Privat | Creare proiect                          |
+| /admin/autentificare        | Privat | Autentificare artist                    |
+| /admin/inregistrare         | Privat | Inregistrare artist                     |
