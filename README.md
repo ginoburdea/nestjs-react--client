@@ -68,3 +68,15 @@ Linkurile acestui proiect sunt impartite in doua categorii:
 | /admin/adauga-proiect       | Privat | Creare proiect                          |
 | /admin/autentificare        | Privat | Autentificare artist                    |
 | /admin/inregistrare         | Privat | Inregistrare artist                     |
+
+## Bine de stiut
+
+Aceasta platforma este conceputa pentru un singur artist.
+
+Daca mai multi isi fac cont, proiectele adaugate vor putea fi vauzte, editate si sterse si de ceilalti artisti.
+
+Asta poate duce la vulenrabilitati, cum ar fi crearea neautorizata de conturi de care vor putea sterge datele artisului.
+
+De accea, pagina de inregistrare accepta o parola de tip master, care nu va permite crearea de cont de catre oricine.
+
+Serverul va fi responsabil cu setarea si verificarea acestei parole. Urmeaza instructiuniile din [repository-ul acestuia](https://github.com/ginoburdea/nestjs-react--server) pentru a afla cum sa o setezi.
