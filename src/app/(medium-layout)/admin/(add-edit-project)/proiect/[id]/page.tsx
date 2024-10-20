@@ -1,6 +1,8 @@
 'use client'
 import { useParams, useRouter } from 'next/navigation'
-import AddEditProjectTemplate from '../../AddEditProjectTemplate'
+import AddEditProjectTemplate, {
+    PhotoWithUrl,
+} from '../../AddEditProjectTemplate'
 import { useEffect, useState } from 'react'
 import { getAxios } from '@/utils/getAxios'
 import { handleAxiosError } from '@/utils/handleAxiosError'
@@ -10,7 +12,7 @@ interface Project {
     url: string
     description: string
     active: boolean
-    photoUrls: string[]
+    photoUrls: PhotoWithUrl[]
 }
 
 export default function EditProjectPage() {
@@ -29,7 +31,10 @@ export default function EditProjectPage() {
 
         try {
             const { data } = await axios.get(`/projects/${params.id}`)
-            setProject({ ...data.project, photoUrls: data.project.photos })
+            setProject({
+                ...data.project,
+                photoUrls: data.project.photos,
+            })
         } catch (error) {
             handleAxiosError(error, router, setError)
         } finally {

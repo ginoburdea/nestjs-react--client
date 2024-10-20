@@ -16,8 +16,13 @@ interface Props {
         url: string
         description: string
         active: boolean
-        photoUrls: string[]
+        photoUrls: PhotoWithUrl[]
     }
+}
+
+export interface PhotoWithUrl {
+    name: string
+    url: string
 }
 
 export default function AddEditProjectTemplate({
