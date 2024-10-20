@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NestJS React - Client
 
-## Getting Started
+O platforma web prin care artistii isi pot construi un site de tip portofoliu:
 
-First, run the development server:
+-   Adauga, editeaza, sterg, seteaza proiecte ca ascunse (inactive)
+-   Impartasesc cu clientii proiectele vizibile (active)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Instrutiuni de utilizare
+
+### 1. Cerinte sistem
+
+Pentru a utliza acest proiect, trebuie sa ai instalate:
+
+-   [NodeJS si NPM](https://nodejs.org/en/download/package-manager)
+-   [git](https://git-scm.com/downloads)
+
+### 2. Descarcare proiect
+
+Deschide un terminal / command prompt si tasteaza urmatoarele comenzi:
+
+```sh
+git clone https://github.com/ginoburdea/nestjs-react--client.git
+cd nestjs-react--client
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Variabile de environment
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Copiaza fisierul `.env.example` si pune-i numele `.env.local` (Acest fisier va fi ignorat de git cand un commit este creat)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Deschide noul fisier si inlocuieste variabilele in functie de instructiunie din acesta.
 
-## Learn More
+### 4. Comenzi
 
-To learn more about Next.js, take a look at the following resources:
+In functie de obiectivul tau, foloseste una dintre urmatoarele comenzi:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```sh
+# Deschidere in modul de dezvoltare (pentru modificari locale si pentru a vedea schimbarile in timp real)
+npm run dev
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Creaza fisiere de tip "build" ce urmeaza a fi folosite in modul de productie (trebuie folosite cu un server static: nginx, caddy, ngrok, etc)
+npm run build
 
-## Deploy on Vercel
+# Vizualizare fiserele de tip "build" (pentru verificarea acestora, nu pentru productie! Foloseste un server mentionat mai sus pentru productie)
+npm start
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Lint fisisere (aplicarea regulilor eslint pentru o calitate imbunatatia a codului)
+npm run lint
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 5. Link-uri
+
+Linkurile acestui proiect sunt impartite in doua categorii:
+
+-   linkuri publice:
+    -   sunt folosite de clientii cu care artistul imparateste site-ul
+    -   nu necesita autentificare
+-   linkuri private:
+    -   incep cu /admin
+    -   sunt folosite doar de artistul care foloseste platforma
+    -   in afara de `/admin/autentificare` si `/admin/inregistrare`, necesita sa fi autentificat pentru a le accesa
+
+| Link                        | Tip    | Descriere                               |
+| --------------------------- | ------ | --------------------------------------- |
+| /                           | Public | Vizualizare proiecte active             |
+| /admin                      | Privat | Vizualizare proiecte active si inactive |
+| /admin/proiect/(id-proiect) | Privat | Editare proiect cu id-ul dat            |
+| /admin/adauga-proiect       | Privat | Creare proiect                          |
+| /admin/autentificare        | Privat | Autentificare artist                    |
+| /admin/inregistrare         | Privat | Inregistrare artist                     |
+
+## Bine de stiut
+
+Aceasta platforma este conceputa pentru un singur artist.
+
+Daca mai multi isi fac cont, proiectele adaugate vor putea fi vauzte, editate si sterse si de ceilalti artisti.
+
+Asta poate duce la vulenrabilitati, cum ar fi crearea neautorizata de conturi de care vor putea sterge datele artisului.
+
+De accea, pagina de inregistrare accepta o parola de tip master, care nu va permite crearea de cont de catre oricine.
+
+Serverul va fi responsabil cu setarea si verificarea acestei parole. Urmeaza instructiuniile din [repository-ul acestuia](https://github.com/ginoburdea/nestjs-react--server) pentru a afla cum sa o setezi.
