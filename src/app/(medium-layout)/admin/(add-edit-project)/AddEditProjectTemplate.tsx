@@ -1,5 +1,6 @@
 'use client'
 import Button from '@/components/Button'
+import IconButton from '@/components/IconButton'
 import Input from '@/components/Input'
 import RadioInputs from '@/components/RadioInputs'
 import useSubmitForm from '@/utils/useSubmitForm'
@@ -16,8 +17,13 @@ interface Props {
         url: string
         description: string
         active: boolean
-        photoUrls: string[]
+        photoUrls: PhotoWithUrl[]
     }
+}
+
+export interface PhotoWithUrl {
+    name: string
+    url: string
 }
 
 export default function AddEditProjectTemplate({
@@ -28,21 +34,22 @@ export default function AddEditProjectTemplate({
 }: Props) {
     const router = useRouter()
     const onSuccess = () => {
-        router.push('/admin/proiecte')
+        router.push('/admin')
     }
 
     const { error, fieldErrors, handleOnSubmit, loading } = useSubmitForm(
         formSubmitUrl,
         onSuccess,
-        () => ({ photos }),
+        () => ({ photos, photosToDelete }),
         formSubmitMethod
     )
 
-    const [photoUrls, setPhotoUrls] = useState<string[]>(
+    const [photoUrls, setPhotoUrls] = useState<PhotoWithUrl[]>(
         defaultValues?.photoUrls || []
     )
 
     const [photos, setPhotos] = useState<File[]>([])
+    const [photosToDelete, setPhotosToDelete] = useState<string[]>([])
 
     const handleFiles = (event: SyntheticEvent<HTMLInputElement>) => {
         if (!(event.currentTarget.files instanceof FileList)) return
@@ -58,7 +65,10 @@ export default function AddEditProjectTemplate({
                 () => {
                     setPhotoUrls(photoUrls => [
                         ...photoUrls,
-                        fileReader.result as string,
+                        {
+                            name: file.name,
+                            url: fileReader.result as string,
+                        },
                     ])
                 },
                 false
@@ -68,17 +78,31 @@ export default function AddEditProjectTemplate({
         }
     }
 
+    const deletePhoto = (name: string) => {
+        setPhotosToDelete(photos => [...photos, name])
+        setPhotos(photos => photos.filter(photo => photo.name !== name))
+        setPhotoUrls(photos => photos.filter(photo => photo.name !== name))
+    }
+
     return (
         <form onSubmit={handleOnSubmit}>
             <h1 className="text-2xl font-bold mb-6">{title}</h1>
 
             <p className="text-sm mb-1 font-bold">Imagini</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 mb-4">
-                {photoUrls.map((photoUrl, index) => (
+                {photoUrls.map(({ name, url }, index) => (
                     <div
-                        className="w-full aspect-square bg-no-repeat bg-center bg-cover p-1 text-right"
-                        style={{ backgroundImage: `url('${photoUrl}')` }}
-                        key={index}></div>
+                        className="w-full aspect-square bg-no-repeat bg-center bg-cover p-1 text-right relative"
+                        style={{ backgroundImage: `url('${url}')` }}
+                        key={index}>
+                        <div className="absolute right-0 top-0 w-fit">
+                            <IconButton
+                                icon="bi-x"
+                                size="md"
+                                onClick={() => deletePhoto(name)}
+                            />
+                        </div>
+                    </div>
                 ))}
 
                 <label className="w-full aspect-square gap-2 p-2 flex justify-center items-center flex-col border-[1px] border-dashed border-blue-300 hover:bg-blue-50 cursor-pointer text-center">
