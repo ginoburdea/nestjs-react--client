@@ -9,6 +9,7 @@ import { useEffect } from 'react'
 
 // Accepted query parameters:
 // error?: string (an error to show to the user)
+// next?: string (the url to redirect the users to after logining in)
 
 export default function RegisterPage() {
     const router = useRouter()
@@ -24,7 +25,8 @@ export default function RegisterPage() {
             expires: date30DaysInTheFuture,
         })
 
-        router.push('/admin')
+        const nextRoute = params.get('next')
+        router.push(typeof nextRoute === 'string' ? nextRoute : '/admin')
     }
 
     const { error, setError, fieldErrors, handleOnSubmit, loading } =
