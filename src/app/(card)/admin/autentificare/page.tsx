@@ -1,13 +1,19 @@
 'use client'
 import Button from '@/components/Button'
 import Input from '@/components/Input'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import ms from 'ms'
 import { setCookie } from 'cookies-next'
 import useSubmitForm from '@/utils/useSubmitForm'
+import { useEffect } from 'react'
+
+// Accepted query parameters:
+// error?: string (an error to show to the user)
+// next?: string (the url to redirect the users to after logining in)
 
 export default function RegisterPage() {
     const router = useRouter()
+    const params = useSearchParams()
 
     const handleSuccess = (data: { name: string; email: string }) => {
         const date30DaysInTheFuture = new Date(Date.now() + ms('30 days'))
@@ -19,13 +25,23 @@ export default function RegisterPage() {
             expires: date30DaysInTheFuture,
         })
 
-        router.push('/admin')
+        const nextRoute = params.get('next')
+        router.push(typeof nextRoute === 'string' ? nextRoute : '/admin')
     }
 
-    const { error, fieldErrors, handleOnSubmit, loading } = useSubmitForm(
-        '/users/login',
-        handleSuccess
-    )
+    const { error, setError, fieldErrors, handleOnSubmit, loading } =
+        useSubmitForm('/users/login', handleSuccess)
+
+    useEffect(() => {
+        const err = params.get('error')
+        if (typeof err === 'string') {
+            setError(err)
+
+            const newQuery = new URLSearchParams(location.search)
+            newQuery.delete('error')
+            router.replace(location.pathname + '?' + newQuery.toString())
+        }
+    }, [])
 
     return (
         <form onSubmit={handleOnSubmit}>

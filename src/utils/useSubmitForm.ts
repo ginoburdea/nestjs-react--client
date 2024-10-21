@@ -71,6 +71,7 @@ export default function useSubmitForm(
     return {
         loading,
         error,
+        setError,
         fieldErrors,
         handleOnSubmit,
     }
