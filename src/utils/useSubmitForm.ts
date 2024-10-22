@@ -10,7 +10,7 @@ export default function useSubmitForm(
     getExtraData?: () => Record<string, any>,
     method: 'post' | 'patch' | 'put' = 'post'
 ) {
-    const [fieldErrors, setFieldErrors] = useState({})
+    const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
     const [error, setError] = useState<string | null>(null)
     const [loading, setLoading] = useState(false)
     const router = useRouter()
@@ -49,7 +49,7 @@ export default function useSubmitForm(
                     if (Object.keys(formData).includes(key)) {
                         setFieldErrors(errors => ({
                             ...errors,
-                            [key]: apiError.response.data.details[key],
+                            [key]: apiError?.response?.data.details[key],
                         }))
                     }
                 }

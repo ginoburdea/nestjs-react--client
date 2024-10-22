@@ -27,7 +27,7 @@ export default function RadioInputs<T>({
             <label className={labelClassName}>
                 {label}
                 {/* this input is hidden, but because it has a name attribute, so it will be sent with http requests */}
-                <input type="hidden" name={name} value={selectedValue} />
+                <input type="hidden" name={name} value={'' + selectedValue} />
             </label>
 
             {options.map(option => (
