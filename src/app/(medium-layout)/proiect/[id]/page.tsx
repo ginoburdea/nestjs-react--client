@@ -2,24 +2,22 @@
 import Link from 'next/link'
 import Photos from './Photos'
 import 'bootstrap-icons/font/bootstrap-icons.css'
+import { useProjectInfo } from '../../GetProjectInfoTemplate'
 
 export default function ViewProjectPage() {
-    const project = {
-        name: 'Lorem ipsum',
-        photos: [
-            'https://placehold.co/250.png',
-            'https://placehold.co/251.png',
-            'https://placehold.co/252.png',
-            'https://placehold.co/253.png',
-        ],
-        url: 'https://example.com/lorem-ipsum',
-        description:
-            'Sint velit cillum ex laboris occaecat exercitation voluptate minim. \nVelit consectetur exercitation quis in incididunt laborum occaecat ut nisi. \nEst amet veniam amet aute reprehenderit sunt. Incididunt eiusmod enim qui nostrud ea laboris exercitation do non. \nExercitation amet laboris velit et dolore deserunt esse irure esse.',
+    const { loading, error, project } = useProjectInfo()
+
+    if (loading) {
+        return <p>Incarcare...</p>
+    }
+
+    if (error || !project) {
+        return <p className="text-red-700">{error}</p>
     }
 
     return (
         <>
-            <Photos photos={project.photos}></Photos>
+            <Photos photos={project.photoUrls.map(photo => photo.url)}></Photos>
 
             <h1 className="text-2xl font-bold mb-2">{project.name}</h1>
 
