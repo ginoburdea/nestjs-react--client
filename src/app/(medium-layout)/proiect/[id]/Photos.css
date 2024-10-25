@@ -1,0 +1,11 @@
+.slick-slider .slick-arrow::before {
+    @apply text-black;
+}
+
+.photo-container {
+    @apply px-1 w-full;
+}
+
+.photo {
+    @apply h-[250px] bg-cover bg-center;
+}
