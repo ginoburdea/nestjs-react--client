@@ -30,7 +30,10 @@ export default function ViewProjectPage() {
 
             <div className="leading-loose">
                 {project.description.split('\n').map(line => (
-                    <p>{line}</p>
+                    <p>
+                        {line}
+                        <span className="text-white">.</span>
+                    </p>
                 ))}
             </div>
         </>
