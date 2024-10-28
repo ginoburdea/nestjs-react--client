@@ -1,5 +1,9 @@
+'use client'
 import Link from 'next/link'
 import './globals.css'
+import 'bootstrap-icons/font/bootstrap-icons.css'
+import { useState } from 'react'
+import clsx from 'clsx'
 
 interface Menu {
     title: string
@@ -30,6 +34,8 @@ export default function RootLayout({
         },
     ]
 
+    const [menuOpen, setMenuOpen] = useState(false)
+
     return (
         <html lang="en">
             <body>
@@ -44,6 +50,39 @@ export default function RootLayout({
                                 {menu.title}
                             </Link>
                         ))}
+                    </div>
+
+                    <div className="sm:hidden text-right">
+                        <p>
+                            <a
+                                className="hover:underline"
+                                onClick={() => setMenuOpen(open => !open)}
+                            >
+                                <span className="mr-2">Meniu</span>
+                                <i className="bi bi-list text-xl align-middle"></i>
+                            </a>
+                        </p>
+                        {menuOpen && (
+                            <div className="pt-4 border-t-[1px] border-gray-300 mt-4">
+                                {menus.map((menu, menuIndex) => (
+                                    <p
+                                        key={menu.title}
+                                        className={clsx(
+                                            menuIndex !== menus.length - 1 &&
+                                                'mb-3'
+                                        )}
+                                    >
+                                        <Link
+                                            href={menu.link}
+                                            className="hover:underline"
+                                            onClick={() => setMenuOpen(false)}
+                                        >
+                                            {menu.title}
+                                        </Link>
+                                    </p>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </nav>
                 <main>{children}</main>
